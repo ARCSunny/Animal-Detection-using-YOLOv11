@@ -1,4 +1,7 @@
 # Animal Detection using YOLOv11
+
+https://github.com/user-attachments/assets/6da972bc-0b89-4c94-a5f6-318d1f9d2968
+
 A deep-learning object detection project that uses Ultralytics YOLO11 (yolo11s) to detect and localize animals in images and videos. It downloads a Kaggle dataset, converts original bounding-box labels into the YOLO annotation format, trains the model, evaluates performance, and runs inference on an uploaded video.
 
 **Project type:** Object Detection / Computer Vision  
