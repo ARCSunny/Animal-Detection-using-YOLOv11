@@ -1,44 +1,12 @@
 # Animal Detection using YOLOv11
 A deep-learning object detection project that uses Ultralytics YOLO11 (yolo11s) to detect and localize animals in images and videos. It downloads a Kaggle dataset, converts original bounding-box labels into the YOLO annotation format, trains the model, evaluates performance, and runs inference on an uploaded video.
 
-> **Project type:** Object Detection / Computer Vision  
-> **Model:** YOLO11s  
-> **Framework:** Ultralytics YOLO  
-> **Primary environment:** Google Colab / Jupyter Notebook  
-> **Dataset:** Antoreep Jana's Animals Detection Images Dataset on Kaggle  
-> **Trained weights included:** `best.pt`
-
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Project Workflow](#project-workflow)
-- [Repository Structure](#repository-structure)
-- [Dataset](#dataset)
-- [Supported Classes](#supported-classes)
-- [Technologies and Dependencies](#technologies-and-dependencies)
-- [Hardware and Runtime](#hardware-and-runtime)
-- [Installation](#installation)
-- [Running the Notebook](#running-the-notebook)
-- [Dataset Preparation and Annotation Conversion](#dataset-preparation-and-annotation-conversion)
-- [Model Training](#model-training)
-- [Evaluation](#evaluation)
-- [Video Inference](#video-inference)
-- [Trained Model](#trained-model)
-- [Results](#results)
-- [Important Training Parameters](#important-training-parameters)
-- [How the Annotation Conversion Works](#how-the-annotation-conversion-works)
-- [YOLO Label Format](#yolo-label-format)
-- [Output Files](#output-files)
-- [Troubleshooting](#troubleshooting)
-- [Limitations](#limitations)
-- [Possible Improvements](#possible-improvements)
-- [Reproducibility Notes](#reproducibility-notes)
-- [License and Attribution](#license-and-attribution)
-
----
+**Project type:** Object Detection / Computer Vision  
+**Model:** YOLO11s  
+**Framework:** Ultralytics YOLO  
+**Primary environment:** Google Colab / Jupyter Notebook  
+**Dataset:** Antoreep Jana's Animals Detection Images Dataset on Kaggle  
+**Trained weights included:** `best.pt`
 
 ## Overview
 
@@ -53,7 +21,7 @@ For example, an image containing a horse, zebra, and lion can produce multiple d
 
 The notebook performs the following operations:
 
-```text
+```
 Kaggle Dataset
       │
       ▼
@@ -87,8 +55,6 @@ Run Detection on Video
 Generate Annotated MP4
 ```
 
----
-
 ## Features
 
 - Uses **YOLO11s** for object detection.
@@ -110,8 +76,6 @@ Generate Annotated MP4
 - Saves an annotated video.
 - Exports the trained `best.pt` weights.
 
----
-
 ## Project Workflow
 
 ### 1. Environment Setup
@@ -132,7 +96,7 @@ It also checks whether CUDA/GPU acceleration is available.
 
 The notebook uses:
 
-```text
+```
 antoreepjana/animals-detection-images-dataset
 ```
 
@@ -190,18 +154,16 @@ YOLO processes the video frame by frame and writes annotated frames/video output
 
 The notebook converts the generated video to MP4 when necessary and downloads:
 
-```text
+```
 result.mp4
 best.pt
 ```
-
----
 
 ## Repository Structure
 
 The supplied project archive contains:
 
-```text
+```
 ABC/
 ├── AnimalDetectionusingYOLO11.ipynb
 └── best.pt
