@@ -188,15 +188,13 @@ The trained YOLO11s checkpoint selected as the best model during training.
 
 It can be loaded with Ultralytics:
 
-```python
+```
 from ultralytics import YOLO
 
 model = YOLO("best.pt")
 ```
 
----
-
-# Dataset
+## Dataset
 
 The project uses the following Kaggle dataset:
 
@@ -214,27 +212,25 @@ The original dataset is expected to contain image files and corresponding annota
 
 The notebook searches recursively for:
 
-```text
+```
 Label/*.txt
 ```
 
 For every image, it attempts to locate the corresponding annotation file:
 
-```text
+```
 <image directory>/Label/<image stem>.txt
 ```
 
 The notebook then extracts:
 
-```text
+```
 class_name x1 y1 x2 y2
 ```
 
 from each valid annotation line.
 
----
-
-# Supported Classes
+## Supported Classes
 
 The trained model contains **80 classes** discovered from the dataset annotations.
 
@@ -321,13 +317,11 @@ The class list used by the training run is:
 79. Worm
 80. Zebra
 
-> The class IDs are assigned automatically by sorting the discovered class names alphabetically. Therefore, if the source dataset or annotations change, the generated class mapping may also change.
+The class IDs are assigned automatically by sorting the discovered class names alphabetically. Therefore, if the source dataset or annotations change, the generated class mapping may also change.
 
----
+## Technologies and Dependencies
 
-# Technologies and Dependencies
-
-## Core Technologies
+### Core Technologies
 
 | Technology | Purpose |
 |---|---|
@@ -342,18 +336,18 @@ The class list used by the training run is:
 | FFmpeg | Video conversion |
 | Google Colab | Notebook execution environment |
 
-## Install Dependencies
+### Install Dependencies
 
 The notebook installs the main packages with:
 
-```bash
+```
 pip install -q ultralytics kaggle
 pip install -q kagglehub
 ```
 
 The notebook also imports:
 
-```python
+```
 import torch
 import ultralytics
 from PIL import Image
@@ -361,13 +355,11 @@ from tqdm import tqdm
 import yaml
 ```
 
----
-
-# Hardware and Runtime
+## Hardware and Runtime
 
 The recorded training run was performed using a GPU runtime with:
 
-```text
+```
 GPU: NVIDIA Tesla T4
 VRAM: approximately 14.9 GB
 CUDA: available
@@ -375,7 +367,7 @@ CUDA: available
 
 The training log reports:
 
-```text
+```
 YOLO11s
 Parameters: 9,443,760
 GFLOPs: 21.6
@@ -395,100 +387,17 @@ The exact training speed and memory usage can vary depending on:
 
 A GPU is strongly recommended for training.
 
----
-
-# Installation
-
-## Option 1 — Google Colab
-
-1. Open `AnimalDetectionusingYOLO11.ipynb` in Google Colab.
-2. Select a GPU runtime.
-3. Run the setup cells.
-4. Authenticate with Kaggle when prompted.
-5. Run the dataset download cell.
-6. Run the annotation conversion cell.
-7. Train the model.
-8. Evaluate the model.
-9. Upload a video for inference.
-
-The notebook was originally designed around Google Colab paths such as:
-
-```text
-/content/
-```
-
-Therefore, it is primarily intended for Colab unless those paths are modified.
-
----
-
-# Running the Notebook
-
-Run the notebook cells in order.
-
-## Step 1 — Setup
-
-The setup cell checks the installation and GPU:
-
-```python
-import torch, ultralytics
-
-ultralytics.checks()
-print("GPU available:", torch.cuda.is_available())
-```
-
-If the output is:
-
-```text
-GPU available: True
-```
-
-CUDA is available to PyTorch.
-
----
-
-## Step 2 — Kaggle Authentication
-
-The notebook uses:
-
-```python
-import kagglehub
-
-kagglehub.login()
-```
-
-This requires Kaggle authentication.
-
-Follow the authentication instructions displayed by KaggleHub.
-
----
-
-## Step 3 — Download Dataset
-
-The dataset is downloaded using:
-
-```python
-SRC = Path(
-    kagglehub.dataset_download(
-        "antoreepjana/animals-detection-images-dataset"
-    )
-)
-```
-
-The resulting path is stored in `SRC`.
-
----
-
-# Dataset Preparation and Annotation Conversion
+## Dataset Preparation and Annotation Conversion
 
 The notebook creates a converted dataset at:
 
-```text
+```
 /content/yolo_animals/
 ```
 
 The resulting structure is:
 
-```text
+```
 yolo_animals/
 ├── images/
 │   ├── train/
@@ -503,7 +412,7 @@ yolo_animals/
 
 ## Image Directories
 
-```text
+```
 images/train/
 images/val/
 ```
@@ -512,7 +421,7 @@ contain the corresponding training and validation images.
 
 ## Label Directories
 
-```text
+```
 labels/train/
 labels/val/
 ```
@@ -523,7 +432,7 @@ contain YOLO `.txt` annotation files.
 
 The notebook creates:
 
-```yaml
+```
 path: /content/yolo_animals
 train: images/train
 val: images/val
@@ -534,36 +443,6 @@ names:
 ```
 
 The exact class mapping is generated automatically.
-
----
-
-# Model Training
-
-The notebook initializes YOLO11s using:
-
-```python
-from ultralytics import YOLO
-
-model = YOLO("yolo11s.pt")
-```
-
-Training is performed using:
-
-```python
-results = model.train(
-    data="/content/yolo_animals/data.yaml",
-    time=3.0,
-    imgsz=640,
-    batch=16,
-    patience=15,
-    project="/content/runs",
-    name="animals",
-    exist_ok=True,
-    workers=2,
-    cache=False,
-    plots=True,
-)
-```
 
 ## Training Configuration
 
@@ -585,26 +464,17 @@ results = model.train(
 
 The `time=3.0` parameter specifies a **maximum training duration of approximately three hours**, rather than explicitly specifying a fixed number of epochs.
 
-In the recorded run, training completed after:
-
-```text
-17 epochs
-3.001 hours
-```
-
----
-
-# Evaluation
+## Evaluation
 
 After training, the notebook loads:
 
-```text
+```
 /content/runs/animals/weights/best.pt
 ```
 
 and evaluates it with:
 
-```python
+```
 best = "/content/runs/animals/weights/best.pt"
 
 model = YOLO(best)
@@ -616,21 +486,19 @@ metrics = model.val(
 
 The notebook prints:
 
-```text
+```
 mAP@50
 mAP@50-95
 ```
 
 and displays:
 
-```text
+```
 results.png
 confusion_matrix_normalized.png
 ```
 
----
-
-# Results
+## Results
 
 The recorded validation run produced the following overall metrics:
 
@@ -645,7 +513,7 @@ The recorded validation run produced the following overall metrics:
 
 The evaluation log reports approximately:
 
-```text
+```
 Speed:
 1.9 ms preprocess
 7.2 ms inference
@@ -663,7 +531,7 @@ Precision measures the proportion of predicted detections that are correct.
 
 A precision of:
 
-```text
+```
 0.597
 ```
 
@@ -675,7 +543,7 @@ Recall measures how many of the relevant objects were successfully detected.
 
 A recall of:
 
-```text
+```
 0.626
 ```
 
@@ -687,7 +555,7 @@ mAP@50 evaluates detection performance using an IoU threshold of 0.50.
 
 Recorded result:
 
-```text
+```
 0.613
 ```
 
@@ -697,19 +565,17 @@ mAP@50-95 averages mean Average Precision over multiple IoU thresholds from 0.50
 
 Recorded result:
 
-```text
+```
 0.527
 ```
 
 This metric is stricter than mAP@50 because it evaluates localization quality at progressively higher IoU thresholds.
 
----
-
-# Video Inference
+## Video Inference
 
 The notebook allows the user to upload a video through Google Colab:
 
-```python
+```
 from google.colab import files
 
 up = files.upload()
@@ -717,7 +583,7 @@ up = files.upload()
 
 The uploaded video is then passed to YOLO:
 
-```python
+```
 model.predict(
     source=video_path,
     stream=True,
@@ -733,7 +599,7 @@ model.predict(
 )
 ```
 
-## Inference Configuration
+### Inference Configuration
 
 | Parameter | Value | Description |
 |---|---:|---|
@@ -744,13 +610,12 @@ model.predict(
 | Save | `True` | Saves annotated output |
 | Line width | `2` | Bounding-box line width |
 
----
 
-# Video Detection Statistics
+## Video Detection Statistics
 
 In the recorded test run, the model processed:
 
-```text
+```
 4,237 frames
 ```
 
@@ -758,7 +623,7 @@ The notebook also counted detections by class across processed frames.
 
 Example recorded counts included:
 
-```text
+```
 Zebra: 1195
 Horse: 958
 Tiger: 369
@@ -773,15 +638,13 @@ These are **frame-level detection counts**, not unique animal counts. If the sam
 
 Therefore:
 
-> A detection count of 1,195 for Zebra does not mean that 1,195 unique zebras were present in the video.
+A detection count of 1,195 for Zebra does not mean that 1,195 unique zebras were present in the video.
 
----
-
-# Trained Model
+## Trained Model
 
 The trained model is provided as:
 
-```text
+```
 best.pt
 ```
 
@@ -789,26 +652,26 @@ It is the best checkpoint selected during the YOLO training process.
 
 ## Load the Model
 
-```python
+```
 from ultralytics import YOLO
 
 model = YOLO("best.pt")
 ```
 
-## Image Inference
+### Image Inference
 
 For an image:
 
-```python
+```
 results = model.predict(
     source="image.jpg",
     conf=0.25
 )
 ```
 
-## Video Inference
+### Video Inference
 
-```python
+```
 results = model.predict(
     source="video.mp4",
     conf=0.25,
@@ -818,11 +681,11 @@ results = model.predict(
 )
 ```
 
-## Webcam Inference
+### Webcam Inference
 
 A compatible camera can also be used with Ultralytics:
 
-```python
+```
 model.predict(
     source=0,
     conf=0.25,
@@ -830,21 +693,19 @@ model.predict(
 )
 ```
 
----
-
-# Output Files
+## Output Files
 
 The notebook creates several outputs.
 
-## Training Outputs
+### Training Outputs
 
-```text
+```
 /content/runs/animals/
 ```
 
 Typical contents include:
 
-```text
+```
 runs/
 └── animals/
     ├── weights/
@@ -855,23 +716,23 @@ runs/
     └── ...
 ```
 
-## Converted Dataset
+### Converted Dataset
 
-```text
+```
 /content/yolo_animals/
 ```
 
 contains:
 
-```text
+```
 images/
 labels/
 data.yaml
 ```
 
-## Video Output
+### Video Output
 
-```text
+```
 /content/output/video_pred/
 ```
 
@@ -879,19 +740,17 @@ contains the annotated video generated by Ultralytics.
 
 The notebook then creates:
 
-```text
+```
 /content/output/result.mp4
 ```
 
 using FFmpeg.
 
----
-
-# How the Annotation Conversion Works
+## How the Annotation Conversion Works
 
 The original annotation format contains:
 
-```text
+```
 <class name> <x1> <y1> <x2> <y2>
 ```
 
@@ -905,7 +764,7 @@ where:
 
 YOLO requires:
 
-```text
+```
 <class_id> <x_center> <y_center> <width> <height>
 ```
 
@@ -913,7 +772,7 @@ with the four coordinate values normalized to `[0, 1]`.
 
 The notebook calculates:
 
-```text
+```
 x_center = (x1 + x2) / 2
 y_center = (y1 + y2) / 2
 
@@ -923,7 +782,7 @@ height = y2 - y1
 
 and then normalizes them:
 
-```text
+```
 x_center / image_width
 y_center / image_height
 width / image_width
@@ -932,25 +791,23 @@ height / image_height
 
 The resulting annotation is written to a `.txt` file.
 
----
-
-# YOLO Label Format
+## YOLO Label Format
 
 Each object is represented by one line:
 
-```text
+```
 class_id x_center y_center width height
 ```
 
 Example:
 
-```text
+```
 17 0.512500 0.473611 0.245000 0.381944
 ```
 
 This means:
 
-```text
+```
 class_id  = 17
 x_center  = 0.512500
 y_center  = 0.473611
@@ -964,27 +821,25 @@ All coordinates are relative to the image dimensions.
 
 YOLO uses:
 
-```text
+```
 normalized center coordinates
 ```
 
 rather than:
 
-```text
+```
 absolute corner coordinates
 ```
 
 This makes annotations independent of the original image resolution.
 
----
-
-# Bounding-Box Validation
+## Bounding-Box Validation
 
 During conversion, the notebook clips coordinates to image boundaries.
 
 Conceptually:
 
-```python
+```
 x1 = max(0, min(x1, x2))
 x2 = min(width, max(x1, x2))
 
@@ -994,40 +849,36 @@ y2 = min(height, max(y1, y2))
 
 It also skips boxes that are too small:
 
-```python
+```
 if x2 - x1 < 2 or y2 - y1 < 2:
     continue
 ```
 
 This helps prevent invalid or unusably small bounding boxes from entering the training dataset.
 
----
-
-# Unique Output Filenames
+## Unique Output Filenames
 
 The conversion process creates a filename based on the original parent directory and image filename:
 
-```python
+```
 stem = f"{img.parent.name}_{img.stem}".replace(" ", "_")
 ```
 
 This reduces the possibility of filename collisions when images from different directories have identical filenames.
 
----
+## Troubleshooting
 
-# Troubleshooting
-
-## 1. CUDA Is Not Available
+### 1. CUDA Is Not Available
 
 If:
 
-```python
+```
 torch.cuda.is_available()
 ```
 
 returns:
 
-```text
+```
 False
 ```
 
@@ -1037,7 +888,7 @@ training may run on CPU and become significantly slower.
 
 In Google Colab:
 
-```text
+```
 Runtime
 → Change runtime type
 → Hardware accelerator
@@ -1046,35 +897,29 @@ Runtime
 
 Then restart/reconnect the runtime if required.
 
----
-
-## 2. Kaggle Authentication Fails
+### 2. Kaggle Authentication Fails
 
 The dataset download depends on KaggleHub authentication.
 
 Run:
 
-```python
+```
 kagglehub.login()
 ```
 
 again and complete the authentication process.
 
----
-
-## 3. No `train` Directory Found
+### 3. No `train` Directory Found
 
 The conversion code expects the dataset to contain a training split.
 
 If the dataset structure has changed, inspect it with the dataset-structure cell and update the split-detection logic.
 
----
-
-## 4. No Validation/Test Split Found
+### 4. No Validation/Test Split Found
 
 The notebook searches for:
 
-```text
+```
 val
 valid
 validation
@@ -1083,37 +928,35 @@ test
 
 If none exists, the conversion step raises:
 
-```text
+```
 No validation/test split found
 ```
 
 The dataset structure must be inspected and the code adjusted accordingly.
 
----
-
-## 5. Out-of-Memory During Training
+### 5. Out-of-Memory During Training
 
 If the GPU runs out of memory, reduce the batch size:
 
-```python
+```
 batch=8
 ```
 
 or:
 
-```python
+```
 batch=4
 ```
 
 You can also reduce the image size:
 
-```python
+```
 imgsz=512
 ```
 
 For example:
 
-```python
+```
 results = model.train(
     data="/content/yolo_animals/data.yaml",
     time=3.0,
@@ -1127,27 +970,23 @@ results = model.train(
 
 Reducing batch size generally has less effect on detection resolution than reducing `imgsz`.
 
----
-
-## 6. Video Output Is Not Displayed Inline
+### 6. Video Output Is Not Displayed Inline
 
 The notebook skips inline preview when the converted MP4 is larger than approximately 25 MB.
 
 In that situation, download:
 
-```text
+```
 /content/output/result.mp4
 ```
 
 instead.
 
----
-
-## 7. `best.pt` Cannot Be Found
+### 7. `best.pt` Cannot Be Found
 
 After training, verify:
 
-```text
+```
 /content/runs/animals/weights/best.pt
 ```
 
@@ -1155,13 +994,11 @@ exists.
 
 If the run name or project directory was changed, update the path used in the evaluation and inference cells.
 
----
-
-# Limitations
+## Limitations
 
 This project has several practical limitations.
 
-## Dataset Imbalance
+### Dataset Imbalance
 
 The validation set contains substantially different numbers of examples for different classes.
 
@@ -1173,21 +1010,21 @@ Some classes have very few validation instances. For example, the recorded valid
 
 Performance estimates for classes with very few examples can therefore be unstable.
 
-## Difficult Classes
+### Difficult Classes
 
 The recorded per-class results show that performance varies considerably between classes.
 
 For example, some classes achieved high mAP@50, while others were substantially lower. This is expected in a multi-class dataset with different object sizes, visual similarity, and sample counts.
 
-## Small Objects
+### Small Objects
 
 Classes such as insects, fish, and other small objects can be difficult to localize, particularly when the object occupies a small portion of an image.
 
-## Similar Classes
+### Similar Classes
 
 Some classes are visually similar, for example:
 
-```text
+```
 Bear / Brown bear / Polar bear
 Turtle / Sea turtle
 Butterfly / Moths and butterflies
@@ -1196,7 +1033,7 @@ Cattle / Bull
 
 This can increase classification confusion.
 
-## Video Counts Are Not Unique Object Counts
+### Video Counts Are Not Unique Object Counts
 
 The video detection counter counts detections per frame.
 
@@ -1204,7 +1041,7 @@ It does not perform object tracking.
 
 Therefore, the same animal can contribute many detections over time.
 
-## No Persistent Tracking
+### No Persistent Tracking
 
 The current notebook performs detection only.
 
@@ -1212,27 +1049,25 @@ It does not assign persistent IDs to objects.
 
 A future version could integrate an object tracker such as ByteTrack or BoT-SORT.
 
----
-
-# Possible Improvements
+## Possible Improvements
 
 The project can be extended in several ways.
 
-## 1. Increase Training Data
+### 1. Increase Training Data
 
 Adding more balanced examples can improve generalization, particularly for classes with few samples.
 
-## 2. Train for Longer
+### 2. Train for Longer
 
 The current run uses a maximum training duration of approximately three hours.
 
 Longer training may improve performance if the model has not converged, although longer training does not automatically guarantee better generalization.
 
-## 3. Hyperparameter Tuning
+### 3. Hyperparameter Tuning
 
 Possible parameters to experiment with include:
 
-```text
+```
 learning rate
 batch size
 image size
@@ -1244,21 +1079,21 @@ confidence threshold
 IoU threshold
 ```
 
-## 4. Use a Larger YOLO Model
+### 4. Use a Larger YOLO Model
 
 The current model is:
 
-```text
+```
 YOLO11s
 ```
 
 Larger YOLO11 variants may provide stronger detection capacity at the cost of increased computational and memory requirements.
 
-## 5. Add Object Tracking
+### 5. Add Object Tracking
 
 Tracking could provide unique IDs:
 
-```text
+```
 Animal #1
 Animal #2
 Animal #3
@@ -1266,7 +1101,7 @@ Animal #3
 
 and allow the system to estimate unique animals instead of counting detections on every frame.
 
-## 6. Improve Class Balance
+### 6. Improve Class Balance
 
 Classes with very few samples can be improved by:
 
@@ -1276,7 +1111,7 @@ Classes with very few samples can be improved by:
 - improving annotation quality,
 - reviewing class definitions.
 
-## 7. Add Image and Webcam Interfaces
+### 7. Add Image and Webcam Interfaces
 
 The trained model can be integrated into:
 
@@ -1288,13 +1123,11 @@ The trained model can be integrated into:
 - webcam applications,
 - edge-device applications.
 
----
-
-# Reproducibility Notes
+## Reproducibility Notes
 
 The recorded experiment used:
 
-```text
+```
 Ultralytics: 8.4.162
 PyTorch: 2.11.0+cu128
 GPU: Tesla T4
@@ -1318,13 +1151,11 @@ Exact results may differ when the project is retrained because of:
 
 The included `best.pt` should be used when the goal is to reproduce the recorded trained model rather than retrain from scratch.
 
----
-
-# Model Usage Example
+## Model Usage Example
 
 Minimal example:
 
-```python
+```
 from ultralytics import YOLO
 
 # Load trained model
@@ -1342,11 +1173,9 @@ for result in results:
     result.save(filename="annotated.jpg")
 ```
 
----
+## Video Usage Example
 
-# Video Usage Example
-
-```python
+```
 from ultralytics import YOLO
 
 model = YOLO("best.pt")
@@ -1362,74 +1191,29 @@ results = model.predict(
 
 The annotated video will be saved by Ultralytics in its configured output directory.
 
----
-
-# Project Outputs
+## Project Outputs
 
 The main deliverables of this project are:
 
-```text
+```
 AnimalDetectionusingYOLO11.ipynb
 best.pt
 ```
 
 After executing the notebook, additional generated files include:
 
-```text
+```
 yolo_animals/
 runs/animals/
 output/video_pred/
 output/result.mp4
 ```
 
----
-
-# License and Attribution
+## License and Attribution
 
 This repository contains a trained model and notebook based on a publicly available Kaggle dataset.
 
-## Dataset Attribution
-
-Dataset:
-
-**Animals Detection Images Dataset**
-
-Author:
-
-**Antoreep Jana**
-
-Kaggle:
-
-https://www.kaggle.com/datasets/antoreepjana/animals-detection-images-dataset
-
-Before redistributing the dataset itself, verify the dataset's current Kaggle license and usage conditions.
-
-## Ultralytics
-
-This project uses the Ultralytics YOLO framework.
-
-Ultralytics documentation:
-
-https://docs.ultralytics.com/
-
-Ultralytics repository:
-
-https://github.com/ultralytics/ultralytics
-
-Check the applicable Ultralytics licensing terms before using the trained model or this project in a commercial application.
-
----
-
-# Acknowledgements
-
-- **Ultralytics** — YOLO11 implementation and training/inference framework.
-- **Kaggle** — dataset hosting and distribution.
-- **Antoreep Jana** — creator of the animal detection dataset.
-- **PyTorch** — deep-learning framework used by Ultralytics.
-
----
-
-# Summary
+## Summary
 
 This project provides a complete YOLO11-based animal detection pipeline:
 
@@ -1457,7 +1241,7 @@ Annotated Output
 
 The recorded model achieved:
 
-```text
+```
 mAP@50      = 0.613
 mAP@50-95   = 0.527
 Precision   = 0.597
