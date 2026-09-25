@@ -1209,10 +1209,6 @@ output/video_pred/
 output/result.mp4
 ```
 
-## License and Attribution
-
-This repository contains a trained model and notebook based on a publicly available Kaggle dataset.
-
 ## Summary
 
 This project provides a complete YOLO11-based animal detection pipeline:
